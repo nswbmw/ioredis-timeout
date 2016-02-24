@@ -2,19 +2,25 @@
 
 var commands = require('ioredis-commands');
 
-function timeout(redis, ms) {
+function timeoutAll(redis, ms) {
   Object.keys(commands).forEach(function (command) {
-    var originCommand = redis[command];
-    redis[command] = function () {
-      var args = [].slice.call(arguments);
-      return Promise.race([
-        promiseDelay(ms, command, args),
-        originCommand.apply(redis, args)
-      ]);
-    };
+    timeout(command, ms, redis);
   });
 
   return redis;
+}
+
+function timeout(command, ms, redis) {
+  var originCommand = redis['_' + command] || redis[command];
+  redis['_' + command] = originCommand;
+  redis[command] = function () {
+    var args = [].slice.call(arguments);
+    return Promise.race([
+      promiseDelay(ms, command, args),
+      originCommand.apply(redis, args)
+    ]);
+  };
+  return redis[command];
 }
 
 function promiseDelay(ms, command, args) {
@@ -28,4 +34,5 @@ function promiseDelay(ms, command, args) {
   });
 }
 
-module.exports = timeout;
+module.exports = timeoutAll;
+module.exports.timeout = timeout;
