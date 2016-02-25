@@ -12,7 +12,7 @@ function timeoutAll(redis, ms) {
 
 function timeout(command, ms, redis) {
   var originCommand = redis['_' + command] || redis[command];
-  redis['_' + command] = originCommand;
+  redis['_' + command] = originCommand.bind(redis);
   redis[command] = function () {
     var args = [].slice.call(arguments);
     return Promise.race([
