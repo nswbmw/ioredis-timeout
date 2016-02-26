@@ -3,6 +3,9 @@
 var commands = require('ioredis-commands');
 
 function timeoutAll(redis, ms) {
+  if (!ms) {
+    return redis;
+  }
   Object.keys(commands).forEach(function (command) {
     timeout(command, ms, redis);
   });
@@ -12,6 +15,9 @@ function timeoutAll(redis, ms) {
 
 function timeout(command, ms, redis) {
   var originCommand = redis['_' + command] || redis[command];
+  if (!ms) {
+    return originCommand;
+  }
   redis['_' + command] = originCommand.bind(redis);
   redis[command] = function () {
     var args = [].slice.call(arguments);
