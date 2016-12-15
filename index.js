@@ -18,6 +18,9 @@ function timeout(command, ms, redis) {
   if (!ms) {
     return originCommand;
   }
+  if (typeof originCommand !== 'function') {
+    return originCommand;
+  }
   redis['_' + command] = originCommand.bind(redis);
   redis[command] = function () {
     var args = [].slice.call(arguments);
