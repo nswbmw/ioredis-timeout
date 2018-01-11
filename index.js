@@ -15,10 +15,12 @@ function timeoutAll(redis, ms) {
 
 function timeout(command, ms, redis) {
   var originCommand = redis['_' + command] || redis[command];
-  if (!ms) {
+  if (!ms || (typeof originCommand !== 'function')) {
     return originCommand;
   }
-  if (typeof originCommand !== 'function') {
+
+  if (['multi', 'pipeline'].indexOf(command) !== -1) {
+    console.warn('ioredis-timeout not support .pipeline or .multi')
     return originCommand;
   }
   redis['_' + command] = originCommand.bind(redis);
