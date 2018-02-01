@@ -29,6 +29,11 @@ redis
 // { [redis.get: Executed timeout 5000 ms] name: 'redis.get', args: [ 'key' ] }
 ```
 
+Suppress warnings by adding an optional parameter
+```
+RedisTimeout(redis, 5000, true);
+```
+
 ### Test
 
 ```
