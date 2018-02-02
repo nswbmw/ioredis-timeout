@@ -2,25 +2,27 @@
 
 var commands = require('ioredis-commands');
 
-function timeoutAll(redis, ms) {
+function timeoutAll(redis, ms, suppressWarnings) {
   if (!ms) {
     return redis;
   }
   Object.keys(commands).forEach(function (command) {
-    timeout(command, ms, redis);
+    timeout(command, ms, redis, suppressWarnings);
   });
 
   return redis;
 }
 
-function timeout(command, ms, redis) {
+function timeout(command, ms, redis, suppressWarnings) {
   var originCommand = redis['_' + command] || redis[command];
   if (!ms || (typeof originCommand !== 'function')) {
     return originCommand;
   }
 
   if (['multi', 'pipeline'].indexOf(command) !== -1) {
-    console.warn('ioredis-timeout not support .pipeline or .multi')
+    if (!suppressWarnings) {
+      console.warn('ioredis-timeout not support .pipeline or .multi')
+    }
     return originCommand;
   }
   redis['_' + command] = originCommand.bind(redis);
