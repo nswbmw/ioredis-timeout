@@ -1,7 +1,7 @@
 {
   "name": "ioredis-timeout",
   "description": "Add timeout to ioredis",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "scripts": {
     "test": "node test"
   },
