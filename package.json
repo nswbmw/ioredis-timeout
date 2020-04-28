@@ -11,7 +11,8 @@
     "timeout"
   ],
   "dependencies": {
-    "ioredis-commands": "^4.0.0"
+    "ioredis-commands": "^4.0.0",
+    "standard-as-callback": "^2.0.1"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,7 @@
 'use strict';
 
 var commands = require('ioredis-commands');
+var asCallback = require('standard-as-callback').default;
 
 function timeoutAll(redis, ms, suppressWarnings) {
   if (!ms) {
@@ -28,10 +29,18 @@ function timeout(command, ms, redis, suppressWarnings) {
   redis['_' + command] = originCommand.bind(redis);
   redis[command] = function () {
     var args = [].slice.call(arguments);
-    return Promise.race([
+    var cb = null;
+    if (typeof args[args.length - 1] === 'function') {
+      cb = args.pop();
+    }
+
+    const promise = Promise.race([
       promiseDelay(ms, command, args),
       originCommand.apply(redis, args)
     ]);
+
+    if(typeof cb === 'function') return asCallback(promise, cb);
+    return promise;
   };
   return redis[command];
 }
