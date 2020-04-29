@@ -1,7 +1,7 @@
 {
   "name": "ioredis-timeout",
   "description": "Add timeout to ioredis",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "scripts": {
     "test": "node test"
   },
@@ -20,6 +20,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ioredis": "^1.15.1"
+    "ioredis": "^4.16.3"
   }
 }
