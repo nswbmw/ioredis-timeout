@@ -17,3 +17,13 @@ redis
   .get('key')
   .then(console.log)
   .catch(console.error);
+
+redis
+  .get('key', function(err, result) {
+    if(err) {
+      console.error(err);
+    }
+    if(result) {
+      console.log(result);
+    }
+  });

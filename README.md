@@ -25,7 +25,18 @@ redis
   .then(console.log)
   .catch(console.error);
 
+redis
+  .get('key', function(err, result) {
+    if(err) {
+      console.error(err);
+    }
+    if(result) {
+      console.log(result);
+    }
+  });
+
 // { [redis.set: Executed timeout 500 ms] name: 'redis.set', args: [ 'key', 'value' ] }
+// { [redis.get: Executed timeout 5000 ms] name: 'redis.get', args: [ 'key' ] }
 // { [redis.get: Executed timeout 5000 ms] name: 'redis.get', args: [ 'key' ] }
 ```
 
